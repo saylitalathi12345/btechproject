@@ -1,0 +1,55 @@
+package com.orienit.kalyan.sentimentanalysis;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.List;
+
+public class NegativeWords
+{
+  private List<String> stopWords;
+  private static NegativeWords singleton;
+  
+  private NegativeWords()
+  {
+    stopWords = new java.util.ArrayList();
+    BufferedReader rd = null;
+    
+    try
+    {
+      InputStream is = getClass().getResourceAsStream("/negative-words.txt");
+      rd = new BufferedReader(new java.io.InputStreamReader(is));
+      String line = null;
+      while ((line = rd.readLine()) != null)
+        stopWords.add(line);
+    } catch (IOException ex) {
+      ex.printStackTrace();
+      try
+      {
+        if (rd != null) {
+          rd.close();
+        }
+      }
+      catch (IOException localIOException1) {}
+    }
+    finally
+    {
+      try
+      {
+        if (rd != null) {
+          rd.close();
+        }
+      } catch (IOException localIOException2) {}
+    }
+  }
+  
+  private static NegativeWords get() {
+    if (singleton == null)
+      singleton = new NegativeWords();
+    return singleton;
+  }
+  
+  public static List<String> getWords() {
+    return getstopWords;
+  }
+}
