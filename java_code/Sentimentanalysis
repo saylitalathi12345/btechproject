@@ -1,0 +1,56 @@
+package com.orienit.kalyan.sentimentanalysis;
+
+import java.util.List;
+
+public class SentimentAnalysis {
+  public SentimentAnalysis() {}
+  
+  public static void main(String[] args) { String[] tweets = { "i am good in hadoop", "i am learning hadoop", "i am not feeling well", "why we need bigdata", "i am not happy with rdbms", 
+      "ravi is not working today", "india got the world cup", "learn hadoop from kalyan blog" };
+    for (String tweet : tweets) {
+      int score = getSentimentScore(tweet);
+      System.out.println("tweet: " + tweet + ",score: " + score);
+    }
+  }
+  
+  public static int getSentimentScore(String tweet) {
+    String modifiedText = tweet.replaceAll("[^a-zA-Z\\s]", "").trim().toLowerCase(java.util.Locale.getDefault());
+    
+    List<String> stopWords = StopWords.getWords();
+    for (String word : stopWords) {
+      modifiedText = modifiedText.replaceAll("\\b" + word + "\\b", "");
+    }
+    
+    List<String> posWords = PositiveWords.getWords();
+    String[] words = modifiedText.split(" ");
+    int numPosWords = 0;
+    for (String word : words) {
+      if (posWords.contains(word)) {
+        numPosWords++;
+      }
+    }
+    List<String> negWords = NegativeWords.getWords();
+    int numNegWords = 0;
+    for (String word : words) {
+      if (negWords.contains(word)) {
+        numNegWords++;
+      }
+    }
+    int score = numPosWords - numNegWords;
+    
+
+
+
+
+
+    if (score > 0) {
+      score = 1;
+    } else if (score < 0) {
+      score = -1;
+    } else {
+      score = 0;
+    }
+    
+    return score;
+  }
+}
